@@ -16,6 +16,7 @@ module.exports = async (req, res) => {
     typeProjet,
     description,
     prospectPrenom,
+    prospectTel,
     prospectEmail,
   } = req.body;
 
@@ -51,6 +52,10 @@ module.exports = async (req, res) => {
                   <td style="padding:8px 0;color:#6b7280;font-size:13px">Email</td>
                   <td style="padding:8px 0;font-size:14px"><a href="mailto:${prospectEmail}" style="color:#1d4ed8">${prospectEmail}</a></td>
                 </tr>
+                ${prospectTel ? `<tr>
+                  <td style="padding:8px 0;color:#6b7280;font-size:13px">Téléphone</td>
+                  <td style="padding:8px 0;color:#111;font-size:14px"><a href="tel:${prospectTel}" style="color:#EF3131">${prospectTel}</a></td>
+                </tr>` : ''}
                 <tr>
                   <td style="padding:8px 0;color:#6b7280;font-size:13px">Service(s)</td>
                   <td style="padding:8px 0;color:#111;font-size:14px;font-weight:600">${servicesStr}</td>
@@ -70,6 +75,10 @@ module.exports = async (req, res) => {
                    style="display:inline-block;background:#1d4ed8;color:#fff;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px">
                   Répondre à ${prospectPrenom}
                 </a>
+                ${prospectTel ? `<a href="tel:${prospectTel}"
+                   style="display:inline-block;background:#16a34a;color:#fff;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;margin-left:10px">
+                  Appeler ${prospectPrenom}
+                </a>` : ''}
               </div>
             </div>
             <p style="text-align:center;color:#9ca3af;font-size:11px;margin-top:16px">
