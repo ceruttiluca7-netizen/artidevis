@@ -9,6 +9,7 @@
     services: (script.getAttribute('data-services') || 'Autre')
                 .split(',').map(s => s.trim()).filter(Boolean),
     endpoint: 'https://artidevis-chi.vercel.app/api/send-devis',
+    demo: script.getAttribute('data-demo') === 'true',
   };
 
   function hex2rgb(hex) {
@@ -224,7 +225,7 @@
     <div id="ad-overlay" role="dialog" aria-modal="true">
       <div id="ad-modal">
         <div id="ad-header">
-          <h2>Demander un devis</h2>
+          <h2>Nous contacter</h2>
           <p>${config.nom}</p>
           <button id="ad-close" aria-label="Fermer">&times;</button>
         </div>
@@ -234,22 +235,22 @@
             <div class="ad-dot" id="ad-dot-2"></div>
           </div>
           <div class="ad-step ad-visible" id="ad-step-1">
-            <span class="ad-label">Pour quel(s) service(s) ?</span>
+            <span class="ad-label">Quel est l'objet de votre demande ?</span>
             <div id="ad-services-list">${buildServices()}</div>
             <div id="ad-autre-wrap">
               <input type="text" id="ad-autre-text" placeholder="Précisez votre besoin...">
             </div>
           </div>
           <div class="ad-step" id="ad-step-2">
-            <span class="ad-label">Type de projet</span>
+            <span class="ad-label">Type de demande</span>
             <div id="ad-qualif-btns">
-              <button class="ad-qualif-btn" type="button">Petits travaux</button>
-              <button class="ad-qualif-btn" type="button">Rénovation partielle</button>
-              <button class="ad-qualif-btn" type="button">Rénovation complète</button>
-              <button class="ad-qualif-btn" type="button">Construction neuve</button>
+              <button class="ad-qualif-btn" type="button">Demande d'information</button>
+              <button class="ad-qualif-btn" type="button">Demande de devis</button>
+              <button class="ad-qualif-btn" type="button">Prise de rendez-vous</button>
+              <button class="ad-qualif-btn" type="button">Autre demande</button>
             </div>
             <span class="ad-label">Décrivez votre projet <span style="font-weight:500;color:#8C7A65;text-transform:none;letter-spacing:0">(optionnel)</span></span>
-            <textarea id="ad-description" placeholder="Quelques mots sur votre projet..."></textarea>
+            <textarea id="ad-description" placeholder="Décrivez votre demande en quelques mots..."></textarea>
             <div class="ad-row">
               <div class="ad-field">
                 <label for="ad-prenom">Prénom *</label>
@@ -271,8 +272,8 @@
                 <polyline points="20 6 9 17 4 12"></polyline>
               </svg>
             </div>
-            <h3>Demande envoyée !</h3>
-            <p>${config.nom} a bien reçu votre demande.<br>Il vous répondra dans les meilleurs délais.</p>
+            <h3>Message envoyé !</h3>
+            <p>${config.nom} a bien reçu votre message.<br>Vous recevrez une réponse dans les meilleurs délais.</p>
           </div>
         </div>
         <div id="ad-send-error">Une erreur est survenue. Veuillez réessayer.</div>
@@ -280,7 +281,7 @@
           <button class="ad-btn-back" id="ad-btn-back" style="display:none">&#8592; Retour</button>
           <button class="ad-btn-primary" id="ad-btn-next">Suivant →</button>
         </div>
-        <div id="ad-rgpd">Vos informations sont transmises uniquement à l'artisan et ne sont pas conservées.</div>
+        <div id="ad-rgpd">Vos informations sont transmises uniquement à votre interlocuteur et ne sont pas conservées.</div>
         <div id="ad-branding">
           <span>Propulsé par</span>
           <a href="https://artivitrine.fr" target="_blank" rel="noopener">ArtiDevis · ArtiVitrine</a>
@@ -354,7 +355,7 @@
     step2.classList.add('ad-visible');
     dot2.classList.add('ad-active');
     btnBack.style.display = '';
-    btnNext.textContent = 'Envoyer ma demande →';
+    btnNext.textContent = 'Envoyer →';
     step = 2;
   }
 
@@ -376,6 +377,20 @@
 
     const checked = [...document.querySelectorAll('#ad-services-list input:checked')];
     const services = checked.map(c => (c.dataset.autre && autreText.value.trim()) ? autreText.value.trim() : c.value);
+
+    if (config.demo) {
+      step2.classList.remove('ad-visible');
+      success.classList.add('ad-visible');
+      success.querySelector('h3').textContent = 'Aperçu du fonctionnement';
+      success.querySelector('p').innerHTML = `
+        Sur votre vitrine en ligne, cette demande serait automatiquement<br>
+        envoyée à votre boîte mail — sans aucune action de votre part.<br><br>
+        <strong style="color:var(--ad-primary)">Contactez ArtiVitrine pour activer cette fonctionnalité.</strong>
+      `;
+      footer.style.display = 'none';
+      rgpd.style.display = 'none';
+      return;
+    }
 
     try {
       const res = await fetch(config.endpoint, {

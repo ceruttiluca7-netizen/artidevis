@@ -35,12 +35,12 @@ module.exports = async (req, res) => {
         from: 'ArtiDevis <notifications@artivitrine.fr>',
         to: artisanEmail,
         replyTo: prospectEmail,
-        subject: `Nouvelle demande de devis — ${servicesStr}`,
+        subject: `Nouvelle demande — ${servicesStr}`,
         html: `
           <div style="font-family:sans-serif;max-width:560px;margin:0 auto">
             <div style="background:#1d4ed8;padding:24px 28px;border-radius:10px 10px 0 0">
-              <h2 style="color:#fff;margin:0;font-size:18px">Nouvelle demande de devis</h2>
-              <p style="color:rgba(255,255,255,0.8);margin:4px 0 0;font-size:13px">Via votre vitrine ArtiVitrine</p>
+              <h2 style="color:#fff;margin:0;font-size:18px">Nouvelle demande de contact</h2>
+              <p style="color:rgba(255,255,255,0.8);margin:4px 0 0;font-size:13px">Via votre vitrine en ligne</p>
             </div>
             <div style="background:#fff;padding:28px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px">
               <table style="width:100%;border-collapse:collapse">
@@ -92,16 +92,16 @@ module.exports = async (req, res) => {
       resend.emails.send({
         from: `${artisanNom} via ArtiVitrine <notifications@artivitrine.fr>`,
         to: prospectEmail,
-        subject: 'Votre demande a bien été reçue',
+        subject: 'Votre message a bien été reçu',
         html: `
           <div style="font-family:sans-serif;max-width:520px;margin:0 auto">
             <div style="background:#1d4ed8;padding:24px 28px;border-radius:10px 10px 0 0">
-              <h2 style="color:#fff;margin:0;font-size:18px">Demande bien reçue</h2>
+              <h2 style="color:#fff;margin:0;font-size:18px">Message bien reçu</h2>
             </div>
             <div style="background:#fff;padding:28px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px">
               <p style="margin:0 0 16px;color:#111;font-size:15px">Bonjour ${prospectPrenom},</p>
               <p style="margin:0 0 16px;color:#374151;font-size:14px;line-height:1.7">
-                <strong>${artisanNom}</strong> a bien reçu votre demande de devis pour : <strong>${servicesStr}</strong>.
+                <strong>${artisanNom}</strong> a bien reçu votre message concernant : <strong>${servicesStr}</strong>.
                 ${typeProjet ? `<br><em>Type de projet : ${typeProjet}</em>` : ''}
               </p>
               <p style="margin:0 0 24px;color:#374151;font-size:14px;line-height:1.7">
