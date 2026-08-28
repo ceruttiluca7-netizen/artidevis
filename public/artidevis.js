@@ -284,7 +284,7 @@
         <div id="ad-rgpd">Vos informations sont transmises uniquement à votre interlocuteur et ne sont pas conservées.</div>
         <div id="ad-branding">
           <span>Propulsé par</span>
-          <a href="https://artivitrine.fr" target="_blank" rel="noopener">ArtiDevis · ArtiVitrine</a>
+          <a href="https://luca-crtt.com" target="_blank" rel="noopener">CRTT</a>
         </div>
       </div>
     </div>
@@ -384,8 +384,8 @@
       success.querySelector('h3').textContent = 'Aperçu du fonctionnement';
       success.querySelector('p').innerHTML = `
         Sur votre vitrine en ligne, cette demande serait automatiquement<br>
-        envoyée à votre boîte mail — sans aucune action de votre part.<br><br>
-        <strong style="color:var(--ad-primary)">Contactez ArtiVitrine pour activer cette fonctionnalité.</strong>
+        envoyée à votre boîte mail, sans aucune action de votre part.<br><br>
+        <strong style="color:var(--ad-primary)">Contactez CRTT pour activer cette fonctionnalité.</strong>
       `;
       footer.style.display = 'none';
       rgpd.style.display = 'none';
