@@ -10,7 +10,19 @@
                 .split(',').map(s => s.trim()).filter(Boolean),
     endpoint: 'https://artidevis-chi.vercel.app/api/send-devis',
     demo: script.getAttribute('data-demo') === 'true',
+    // Optionnels. Sans eux, le comportement historique est inchange.
+    qualif: (script.getAttribute('data-qualif')
+              || "Demande d'information,Demande de devis,Prise de rendez-vous,Autre demande")
+              .split(',').map(s => s.trim()).filter(Boolean),
+    qualifLabel: script.getAttribute('data-qualif-label') || 'Type de demande',
+    branding: script.getAttribute('data-branding') !== 'false',
   };
+
+  function esc(v) {
+    return String(v == null ? '' : v)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+  }
 
   function hex2rgb(hex) {
     return [
@@ -242,12 +254,9 @@
             </div>
           </div>
           <div class="ad-step" id="ad-step-2">
-            <span class="ad-label">Type de demande</span>
+            <span class="ad-label">${esc(config.qualifLabel)}</span>
             <div id="ad-qualif-btns">
-              <button class="ad-qualif-btn" type="button">Demande d'information</button>
-              <button class="ad-qualif-btn" type="button">Demande de devis</button>
-              <button class="ad-qualif-btn" type="button">Prise de rendez-vous</button>
-              <button class="ad-qualif-btn" type="button">Autre demande</button>
+              ${config.qualif.map(q => `<button class="ad-qualif-btn" type="button">${esc(q)}</button>`).join('')}
             </div>
             <span class="ad-label">Décrivez votre projet <span style="font-weight:500;color:#8C7A65;text-transform:none;letter-spacing:0">(optionnel)</span></span>
             <textarea id="ad-description" placeholder="Décrivez votre demande en quelques mots..."></textarea>
@@ -282,10 +291,10 @@
           <button class="ad-btn-primary" id="ad-btn-next">Suivant →</button>
         </div>
         <div id="ad-rgpd">Vos informations sont transmises uniquement à votre interlocuteur et ne sont pas conservées.</div>
-        <div id="ad-branding">
+        ${config.branding ? `<div id="ad-branding">
           <span>Propulsé par</span>
           <a href="https://luca-crtt.com" target="_blank" rel="noopener">CRTT</a>
-        </div>
+        </div>` : ''}
       </div>
     </div>
   `;

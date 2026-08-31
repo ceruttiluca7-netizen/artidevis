@@ -17,6 +17,7 @@ const ARTISANS = {
   'technibois.agencement@gmail.com': 'Technibois',
   'lespaysagesdemandin@gmail.com': 'Les Paysages de Mandin',
   'contact@craiestudioarchi.fr': 'Craie Studio',
+  'relaischantier.app@gmail.com': 'Relais Chantier',
 };
 
 const EXTRA_ALLOWED = (process.env.ALLOWED_ARTISAN_EMAILS || '')
