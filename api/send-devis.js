@@ -18,6 +18,7 @@ const ARTISANS = {
   'lespaysagesdemandin@gmail.com': 'Les Paysages de Mandin',
   'contact@craiestudioarchi.fr': 'Craie Studio',
   'relaischantier.app@gmail.com': 'Relais Chantier',
+  'support@relais-chantier.fr': 'Relais Chantier',
 };
 
 const EXTRA_ALLOWED = (process.env.ALLOWED_ARTISAN_EMAILS || '')

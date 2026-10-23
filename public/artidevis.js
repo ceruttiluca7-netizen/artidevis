@@ -422,6 +422,19 @@
       footer.style.display = 'none';
       rgpd.style.display = 'none';
     } catch {
+      // Repli : si l'envoi échoue, le visiteur garde un moyen de joindre l'artisan
+      // (lien mailto pré-rempli). Construit en DOM, pas en innerHTML.
+      sendError.textContent = 'L\'envoi n\'a pas abouti. Écrivez directement à ';
+      const mail = document.createElement('a');
+      const corps = [
+        services.length ? `Prestations : ${services.join(', ')}` : '',
+        document.getElementById('ad-description').value.trim(),
+        `${document.getElementById('ad-prenom').value.trim()} ${document.getElementById('ad-tel').value.trim()}`.trim(),
+      ].filter(Boolean).join('\n\n');
+      mail.href = `mailto:${config.email}?subject=${encodeURIComponent('Demande de devis')}&body=${encodeURIComponent(corps)}`;
+      mail.textContent = config.email;
+      mail.style.color = 'inherit';
+      sendError.append(mail, '.');
       sendError.classList.add('ad-visible');
       btnNext.disabled = false;
       btnNext.textContent = 'Réessayer';
