@@ -21,6 +21,36 @@ const ARTISANS = {
   'support@relais-chantier.fr': 'Relais Chantier',
 };
 
+// Copie des demandes vers une adresse d'équipe, par artisan (ajoutée le 30/10/2026).
+// Le destinataire principal reste l'artisan : il garde le premier contact avec le
+// prospect. L'équipe reçoit la même demande en copie, au même moment.
+const ARTISAN_CC = {
+  'asdebatiment33@outlook.fr': ['conduc.asdebatiment33@gmail.com'],
+};
+
+// Mail de confirmation personnalisé, par artisan. Les champs absents reprennent
+// le mail générique. Aucun délai n'est promis tant qu'il n'est pas confirmé par écrit.
+const ARTISAN_CONFIRMATION = {
+  'asdebatiment33@outlook.fr': {
+    couleur: '#1e6738',
+    titre: 'Votre demande est bien arrivée',
+    sujet: 'Votre demande est bien arrivée chez AS de Bâtiment',
+    suite: 'Alban Gratia vous rappelle au numéro indiqué pour comprendre votre projet. Ensuite, nous fixons une visite sur place et vous recevez un devis détaillé.',
+    lienLibelle: 'En attendant, regardez nos réalisations',
+    lienUrl: 'https://asdebatiment.fr/realisations',
+    telephone: '07 69 19 91 33',
+    telephoneHref: '+33769199133',
+  },
+};
+
+function artisanCc(email) {
+  return ARTISAN_CC[String(email || '').toLowerCase()] || [];
+}
+
+function artisanConfirmation(email) {
+  return ARTISAN_CONFIRMATION[String(email || '').toLowerCase()] || {};
+}
+
 const EXTRA_ALLOWED = (process.env.ALLOWED_ARTISAN_EMAILS || '')
   .split(',')
   .map((s) => s.trim().toLowerCase())
@@ -150,6 +180,7 @@ module.exports = async (req, res) => {
   const safeType = escapeHtml(typeProjet);
   const safeDescription = escapeHtml(description || 'Non renseigné');
   const safeNom = escapeHtml(nomArtisan);
+  const confirmation = artisanConfirmation(artisanEmail);
 
   try {
     const [resArtisan, resProspect] = await Promise.all([
@@ -158,6 +189,7 @@ module.exports = async (req, res) => {
       resend.emails.send({
         from: 'CRTT <notifications@luca-crtt.com>',
         to: artisanEmail,
+        ...(artisanCc(artisanEmail).length ? { cc: artisanCc(artisanEmail) } : {}),
         replyTo: prospectEmail,
         subject: sanitizeHeader(`Nouvelle demande — ${safeServices}`, 'Nouvelle demande', 150),
         html: `
@@ -212,25 +244,31 @@ module.exports = async (req, res) => {
         `,
       }),
 
-      // Mail de confirmation au prospect
+      // Mail de confirmation au prospect (personnalisable par artisan, cf. ARTISAN_CONFIRMATION)
       resend.emails.send({
         from: `${nomArtisan} <notifications@luca-crtt.com>`,
         to: prospectEmail,
-        subject: 'Votre message a bien été reçu',
+        subject: confirmation.sujet || 'Votre message a bien été reçu',
         html: `
           <div style="font-family:sans-serif;max-width:520px;margin:0 auto">
-            <div style="background:#1d4ed8;padding:24px 28px;border-radius:10px 10px 0 0">
-              <h2 style="color:#fff;margin:0;font-size:18px">Message bien reçu</h2>
+            <div style="background:${confirmation.couleur || '#1d4ed8'};padding:24px 28px;border-radius:10px 10px 0 0">
+              <h2 style="color:#fff;margin:0;font-size:18px">${escapeHtml(confirmation.titre || 'Message bien reçu')}</h2>
             </div>
             <div style="background:#fff;padding:28px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px">
               <p style="margin:0 0 16px;color:#111;font-size:15px">Bonjour ${safePrenom},</p>
               <p style="margin:0 0 16px;color:#374151;font-size:14px;line-height:1.7">
-                <strong>${safeNom}</strong> a bien reçu votre message concernant : <strong>${safeServices}</strong>.
-                ${typeProjet ? `<br><em>Type de projet : ${safeType}</em>` : ''}
+                <strong>${safeNom}</strong> a bien reçu votre demande concernant : <strong>${safeServices}</strong>.
+                ${typeProjet ? `<br><em>Type de demande : ${safeType}</em>` : ''}
               </p>
-              <p style="margin:0 0 24px;color:#374151;font-size:14px;line-height:1.7">
-                Il vous répondra dans les meilleurs délais directement par email.
+              <p style="margin:0 0 ${confirmation.lienUrl ? '16px' : '24px'};color:#374151;font-size:14px;line-height:1.7">
+                ${escapeHtml(confirmation.suite || 'Il vous répondra dans les meilleurs délais directement par email.')}
               </p>
+              ${confirmation.lienUrl ? `<p style="margin:0 0 16px;font-size:14px;line-height:1.7">
+                <a href="${escapeHtml(confirmation.lienUrl)}" style="color:${confirmation.couleur || '#1d4ed8'};font-weight:700">${escapeHtml(confirmation.lienLibelle || 'Voir le site')}</a>
+              </p>` : ''}
+              ${confirmation.telephone ? `<p style="margin:0 0 24px;color:#374151;font-size:14px;line-height:1.7">
+                Une question ou une urgence : <a href="tel:${escapeHtml(confirmation.telephoneHref || confirmation.telephone)}" style="color:#111;font-weight:700;text-decoration:none">${escapeHtml(confirmation.telephone)}</a>
+              </p>` : ''}
               <div style="background:#f9fafb;border-radius:8px;padding:16px;font-size:13px;color:#6b7280">
                 Vos informations ont été transmises directement à l'artisan et ne sont pas conservées.
               </div>
