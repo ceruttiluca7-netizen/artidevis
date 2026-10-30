@@ -29,13 +29,13 @@ const ARTISAN_CC = {
 };
 
 // Mail de confirmation personnalisé, par artisan. Les champs absents reprennent
-// le mail générique. Aucun délai n'est promis tant qu'il n'est pas confirmé par écrit.
+// le mail générique. Délais AS de Bâtiment confirmés par écrit (Jules, 30/10/2026) : rappel 24 h ouvrées, devis 48 h après visite.
 const ARTISAN_CONFIRMATION = {
   'asdebatiment33@outlook.fr': {
     couleur: '#1e6738',
     titre: 'Votre demande est bien arrivée',
     sujet: 'Votre demande est bien arrivée chez AS de Bâtiment',
-    suite: 'Alban Gratia vous rappelle au numéro indiqué pour comprendre votre projet. Ensuite, nous fixons une visite sur place et vous recevez un devis détaillé.',
+    suite: 'Alban Gratia vous rappelle sous 24 h ouvrées au numéro indiqué pour comprendre votre projet. Ensuite, nous fixons une visite sur place et vous recevez un devis détaillé sous 48 h après la visite.',
     lienLibelle: 'En attendant, regardez nos réalisations',
     lienUrl: 'https://asdebatiment.fr/realisations',
     telephone: '07 69 19 91 33',
