@@ -290,7 +290,7 @@
           <button class="ad-btn-back" id="ad-btn-back" style="display:none">&#8592; Retour</button>
           <button class="ad-btn-primary" id="ad-btn-next">Suivant →</button>
         </div>
-        <div id="ad-rgpd">Vos informations sont transmises uniquement à votre interlocuteur et ne sont pas conservées.</div>
+        <div id="ad-rgpd">Vos informations sont transmises par e-mail à votre interlocuteur et servent uniquement à traiter votre demande.</div>
         ${config.branding ? `<div id="ad-branding">
           <span>Propulsé par</span>
           <a href="https://luca-crtt.com" target="_blank" rel="noopener">CRTT</a>

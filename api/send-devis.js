@@ -94,7 +94,7 @@ function isValidEmail(value) {
 // reste comptable par site.
 // IMPORTANT : métadonnées SEULEMENT (client, date, service, statut). Aucune
 // donnée personnelle du prospect, parce que le formulaire promet au visiteur
-// que ses informations ne sont pas conservées.
+// que ses informations servent uniquement à traiter sa demande.
 const LEDGER_TO = process.env.LEDGER_EMAIL || 'cerutti.luca7+leads@gmail.com';
 
 async function journaliser(nomArtisan, services, statut) {
@@ -270,7 +270,7 @@ module.exports = async (req, res) => {
                 Une question ou une urgence : <a href="tel:${escapeHtml(confirmation.telephoneHref || confirmation.telephone)}" style="color:#111;font-weight:700;text-decoration:none">${escapeHtml(confirmation.telephone)}</a>
               </p>` : ''}
               <div style="background:#f9fafb;border-radius:8px;padding:16px;font-size:13px;color:#6b7280">
-                Vos informations ont été transmises directement à l'artisan et ne sont pas conservées.
+                Vos informations ont été transmises par e-mail à l'artisan et servent uniquement à traiter votre demande.
               </div>
             </div>
             <p style="text-align:center;color:#9ca3af;font-size:11px;margin-top:16px">
